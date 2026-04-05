@@ -829,11 +829,11 @@
 .floating-heart {
     position: absolute;
     bottom: -50px;
-    color: #c41e3a;
-    opacity: 0.6;
-    font-size: 1.5rem;
-    animation: floatUp 10s infinite linear;
-    text-shadow: 0 0 10px rgba(196, 30, 58, 0.3);
+    color: rgba(255, 192, 203, 0.85);
+    opacity: 0.5;
+    font-size: 1.3rem;
+    animation: floatUp 12s infinite linear;
+    text-shadow: 0 0 8px rgba(255, 182, 193, 0.35);
 }
 
 @keyframes floatUp {
@@ -842,13 +842,13 @@
         opacity: 0;
     }
     10% {
-        opacity: 0.6;
+        opacity: 0.45;
     }
     90% {
-        opacity: 0.6;
+        opacity: 0.45;
     }
     100% {
-        transform: translateY(-110vh) rotate(360deg) scale(1.2);
+        transform: translateY(-110vh) rotate(360deg) scale(1.1);
         opacity: 0;
     }
 }
@@ -901,22 +901,22 @@
         const container = document.getElementById('heartsContainer');
         if (!container) return;
         
-        const heartSymbols = ['❤', '♥', '❥', '💕', '💖'];
+        const heartSymbols = ['❤', '💕', '💗'];
         
         setInterval(() => {
             const heart = document.createElement('div');
             heart.className = 'floating-heart';
             heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
             heart.style.left = Math.random() * 100 + '%';
-            heart.style.animationDuration = (Math.random() * 5 + 8) + 's';
-            heart.style.fontSize = (Math.random() * 1.5 + 1) + 'rem';
+            heart.style.animationDuration = (Math.random() * 4 + 10) + 's';
+            heart.style.fontSize = (Math.random() * 0.8 + 1) + 'rem';
             
             container.appendChild(heart);
             
             setTimeout(() => {
                 if (heart.parentNode) heart.remove();
-            }, 13000);
-        }, 800);
+            }, 15000);
+        }, 2000);
     }
 
     window.addEventListener('load', createFloatingHearts);
