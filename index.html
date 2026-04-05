@@ -870,10 +870,18 @@
         }
     }
 
-    // Автозапуск после любого клика на странице
-    document.addEventListener('click', function() {
-        startExperience();
-    });
+    // Автозапуск после любого нажатия/касаний на странице
+    function bindMusicStart() {
+        const handler = () => {
+            startExperience();
+        };
+
+        document.addEventListener('click', handler, { once: true });
+        document.addEventListener('touchstart', handler, { once: true });
+        document.addEventListener('pointerdown', handler, { once: true });
+    }
+
+    bindMusicStart();
 
     // По клику на первый блок также скроллим вниз
     document.getElementById('hero').addEventListener('click', function() {
