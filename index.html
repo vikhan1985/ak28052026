@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artem & Kristina — Приглашение на свадьбу</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #1a1a1a;
+            --white: #ffffff;
+            --red: #c41e3a;
+            --red-light: #e63950;
+            --gray: #f8f8f8;
+            --text-gray: #666;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--white);
+            color: var(--black);
+            overflow-x: hidden;
+        }
+
+        /* Section 1: Hero with music trigger */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, #fefefe 0%, #f5f5f5 100%);
+            position: relative;
+            cursor: pointer;
+            transition: all 0.5s ease;
+        }
+
+        .hero:hover {
+            background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 100%);
+        }
+
+        .hero-content {
+            text-align: center;
+            animation: fadeInUp 1.5s ease-out;
+        }
+
+        .hero-names {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 300;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            color: var(--black);
+        }
+
+        .hero-subtitle {
+            font-size: clamp(0.9rem, 2vw, 1.2rem);
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--text-gray);
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .hero-date {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            color: var(--red);
+            letter-spacing: 0.3em;
+            margin-bottom: 3rem;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            opacity: 0.6;
+        }
+
+        .scroll-indicator svg {
+            width: 30px;
+            height: 30px;
+            stroke: var(--black);
+            stroke-width: 1.5;
+            fill: none;
+        }
+
+        .music-hint {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--text-gray);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .hero:hover .music-hint {
+            opacity: 1;
+        }
+
+        /* NEW: Invitation with Photo Section */
+        .invitation-photo {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .invitation-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1519741497674-611481863552?w=1920&h=1080&fit=crop') center/cover;
+            filter: brightness(0.4);
+            transform: scale(1.1);
+            animation: slowZoom 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes slowZoom {
+            from { transform: scale(1.1); }
+            to { transform: scale(1.2); }
+        }
+
+        .invitation-overlay {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 4rem 2rem;
+            max-width: 900px;
+        }
+
+        .invitation-label {
+            font-size: 0.9rem;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .invitation-text-content {
+            color: var(--white);
+            margin-bottom: 4rem;
+        }
+
+        .invitation-text-content h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            margin-bottom: 2rem;
+            line-height: 1.2;
+        }
+
+        .invitation-text-content p {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            line-height: 2;
+            font-weight: 300;
+            opacity: 0.95;
+            margin-bottom: 1rem;
+        }
+
+        /* Calendar Style Date */
+        .calendar-card {
+            display: inline-block;
+            background: var(--white);
+            padding: 2rem 3rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: fadeInUp 1s ease-out 0.5s both;
+        }
+
+        .calendar-month {
+            font-size: 0.9rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--red);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .calendar-day {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 300;
+            color: var(--black);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .calendar-year {
+            font-size: 0.8rem;
+            letter-spacing: 0.2em;
+            color: var(--text-gray);
+            text-transform: uppercase;
+        }
+
+        .calendar-weekday {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+            font-size: 0.9rem;
+            color: var(--text-gray);
+            letter-spacing: 0.1em;
+        }
+
+        /* Venue Section */
+        .venue {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: var(--gray);
+        }
+
+        .venue-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 4rem;
+        }
+
+        .venue-label {
+            font-size: 0.8rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--red);
+            margin-bottom: 1rem;
+        }
+
+        .venue-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 400;
+            margin-bottom: 2rem;
+            line-height: 1.2;
+        }
+
+        .venue-address {
+            font-size: 1.1rem;
+            line-height: 2;
+            color: var(--text-gray);
+            margin-bottom: 2rem;
+        }
+
+        .venue-address strong {
+            color: var(--black);
+            font-weight: 500;
+        }
+
+        .venue-image {
+            background: url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800&h=1000&fit=crop') center/cover;
+            min-height: 50vh;
+            position: relative;
+        }
+
+        .venue-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to right, var(--gray), transparent);
+        }
+
+        /* Timeline Section */
+        .timeline {
+            min-height: 100vh;
+            padding: 6rem 2rem;
+            background: var(--white);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timeline-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-bottom: 4rem;
+            text-align: center;
+        }
+
+        .timeline-container {
+            max-width: 800px;
+            width: 100%;
+            position: relative;
+        }
+
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: var(--red);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            display: flex;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row-reverse;
+            text-align: right;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content {
+            padding-right: 3rem;
+            padding-left: 0;
+        }
+
+        .timeline-content {
+            width: 50%;
+            padding-left: 3rem;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            background: var(--red);
+            border-radius: 50%;
+            transform: translateX(-50%);
+            border: 3px solid var(--white);
+            box-shadow: 0 0 0 1px var(--red);
+        }
+
+        .timeline-time {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            color: var(--red);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-event {
+            font-size: 1.1rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-desc {
+            font-size: 0.95rem;
+            color: var(--text-gray);
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        /* RSVP Section */
+        .rsvp {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 2rem;
+            background: var(--gray);
+        }
+
+        .rsvp-container {
+            max-width: 600px;
+            width: 100%;
+            background: var(--white);
+            padding: 4rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.05);
+        }
+
+        .rsvp-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            text-align: center;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        .rsvp-subtitle {
+            text-align: center;
+            color: var(--text-gray);
+            margin-bottom: 3rem;
+            font-size: 0.9rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            color: var(--text-gray);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: var(--white);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--red);
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 2rem;
+            margin-top: 0.5rem;
+        }
+
+        .radio-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 0.95rem !important;
+            text-transform: none !important;
+            letter-spacing: 0 !important;
+        }
+
+        .radio-label input {
+            width: auto !important;
+            margin-right: 0.5rem;
+            accent-color: var(--red);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: var(--red);
+            color: var(--white);
+            border: none;
+            font-size: 0.9rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .submit-btn:hover {
+            background: var(--black);
+        }
+
+        /* Footer */
+        .footer {
+            min-height: 50vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 2rem;
+            background: var(--black);
+            color: var(--white);
+            text-align: center;
+        }
+
+        .footer-message {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            font-weight: 300;
+            line-height: 1.8;
+            max-width: 600px;
+            margin-bottom: 3rem;
+            font-style: italic;
+        }
+
+        .footer-divider {
+            width: 40px;
+            height: 1px;
+            background: var(--red);
+            margin: 2rem 0;
+        }
+
+        .contacts-title {
+            font-size: 0.9rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            color: var(--red);
+        }
+
+        .contact-info {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .contact-info a {
+            color: var(--white);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+
+        .contact-info a:hover {
+            border-bottom-color: var(--red);
+        }
+
+        .final-names {
+            margin-top: 3rem;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            letter-spacing: 0.2em;
+            opacity: 0.8;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-5px);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .venue {
+                grid-template-columns: 1fr;
+            }
+
+            .venue-info {
+                padding: 3rem 2rem;
+            }
+
+            .venue-image {
+                min-height: 40vh;
+                order: -1;
+            }
+
+            .venue-image::after {
+                background: linear-gradient(to bottom, transparent, var(--gray));
+            }
+
+            .timeline-container::before {
+                left: 20px;
+            }
+
+            .timeline-item,
+            .timeline-item:nth-child(odd) {
+                flex-direction: column;
+                text-align: left;
+                padding-left: 50px;
+            }
+
+            .timeline-content,
+            .timeline-item:nth-child(odd) .timeline-content {
+                width: 100%;
+                padding-left: 0;
+                padding-right: 0;
+            }
+
+            .timeline-dot {
+                left: 20px;
+            }
+
+            .rsvp-container {
+                padding: 2rem;
+            }
+
+            .radio-group {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .calendar-card {
+                padding: 1.5rem 2rem;
+            }
+        }
+
+        /* Reveal animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Section 1: Hero -->
+    <section class="hero" id="hero" onclick="startExperience()">
+        <div class="hero-content">
+            <h1 class="hero-names">Artem & Kristina</h1>
+            <p class="hero-subtitle">Приглашение на свадьбу</p>
+            <p class="hero-date">28.05.2026</p>
+        </div>
+        
+        <div class="music-hint">Нажмите для воспроизведения музыки</div>
+        
+        <div class="scroll-indicator">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 5v14M19 12l-7 7-7-7"/>
+            </svg>
+        </div>
+
+        <audio id="weddingMusic" loop>
+            <source src="https://fine.sunproxy.net/file/Z3ZLemZLVm9IOEg1U0ZVN2dUbTlpRDg5aHJDc1JBMjFLaVU4UFRRWXRjZ2s5c0dLdmZIc0NQN1N2SFdBN0RXMHdUejRPY01mUzV6YXhidWVDbWJFWmNEMFdVZVFHZjdXMlpPVHA0YU1RY2s9/Glee_Cast_-_A_Thousand_Years_(SkySound.cc).mp3" type="audio/mpeg">
+        </audio>
+    </section>
+
+    <!-- Section 2: Invitation with Photo Background -->
+    <section class="invitation-photo" id="invitation">
+        <div class="invitation-bg"></div>
+        <div class="invitation-overlay">
+            <div class="invitation-label reveal">Дорогие гости!</div>
+            
+            <div class="invitation-text-content reveal">
+                <h2>Мы с искренней радостью<br>приглашаем вас на нашу свадьбу!</h2>
+                <p>Ваше присутствие сделает этот день<br>ещё теплее и значимее для нас.</p>
+                <p>Будем счастливы разделить с вами<br>этот важный день!</p>
+            </div>
+
+            <!-- Calendar Card -->
+            <div class="calendar-card reveal">
+                <div class="calendar-month">Май</div>
+                <div class="calendar-day">28</div>
+                <div class="calendar-year">2026</div>
+                <div class="calendar-weekday">Четверг</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Venue -->
+    <section class="venue" id="venue">
+        <div class="venue-info reveal">
+            <div class="venue-label">Место проведения банкета</div>
+            <h2 class="venue-title">С нетерпением<br>ждём вас</h2>
+            <div class="venue-address">
+                <p>по адресу:</p>
+                <p><strong>«Gaia Event Space»</strong></p>
+                <p>Медеуский район,<br>ул. Луганского 54/5</p>
+            </div>
+        </div>
+        <div class="venue-image"></div>
+    </section>
+
+    <!-- Section 4: Program -->
+    <section class="timeline" id="program">
+        <h2 class="timeline-title reveal">Программа дня</h2>
+        <div class="timeline-container">
+            <div class="timeline-item reveal">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-time">15:00</div>
+                    <div class="timeline-event">Сбор гостей</div>
+                    <div class="timeline-desc">просим взять с собой хорошее настроение и свои улыбки</div>
+                </div>
+            </div>
+            
+            <div class="timeline-item reveal">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-time">16:00</div>
+                    <div class="timeline-event">Церемония</div>
+                    <div class="timeline-desc">самый трогательный момент</div>
+                </div>
+            </div>
+            
+            <div class="timeline-item reveal">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-time">17:00</div>
+                    <div class="timeline-event">Банкет</div>
+                    <div class="timeline-desc">время для вкусной еды, развлечений и поздравлений</div>
+                </div>
+            </div>
+            
+            <div class="timeline-item reveal">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-time">23:00</div>
+                    <div class="timeline-event">Завершение</div>
+                    <div class="timeline-desc">к сожалению, даже такой приятный вечер заканчивается</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 5: RSVP -->
+    <section class="rsvp" id="rsvp">
+        <div class="rsvp-container reveal">
+            <h2 class="rsvp-title">Подтверждение</h2>
+            <p class="rsvp-subtitle">Пожалуйста, сообщите нам о вашем решении</p>
+            
+            <form id="rsvpForm" action="https://formsubmit.co/viktoriyatsoy85@gmail.com" method="POST">
+                <input type="hidden" name="_subject" value="RSVP: Artem & Kristina Wedding">
+                <input type="hidden" name="_captcha" value="false">
+                <div class="form-group">
+                    <label>Ваше имя и фамилия</label>
+                    <input type="text" name="name" required placeholder="Введите ваше имя">
+                </div>
+                
+                <div class="form-group">
+                    <label>Присутствие</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="attendance" value="yes" required>
+                            Обязательно приду
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="attendance" value="no">
+                            К сожалению, не смогу
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Количество гостей (включая вас)</label>
+                    <select name="guests" required>
+                        <option value="1">1 человек</option>
+                        <option value="2">2 человека</option>
+                        <option value="3">3 человека</option>
+                        <option value="4">4 человека</option>
+                        <option value="5">5 человек</option>
+                        <option value="6">6 человек</option>
+                        <option value="7">7 человек</option>
+                        <option value="8">8 человек</option>
+                        <option value="9">9 человек</option>
+                        <option value="10">10 человек</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Пожелания молодожёнам</label>
+                    <textarea name="wishes" rows="3" placeholder="Ваши тёплые слова..."></textarea>
+                </div>
+                
+                <button type="submit" class="submit-btn">Отправить</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Section 6: Footer -->
+    <footer class="footer" id="contacts">
+        <div class="footer-message reveal">
+            Мы очень рады, что этот важный день проведём вместе с вами.<br>
+            До скорой встречи!
+        </div>
+        
+        <div class="footer-divider reveal"></div>
+        
+        <div class="contacts-title reveal">Контакты</div>
+        
+        <div class="contact-info reveal">
+            <p>По организационным моментам и любым творческим идеям<br>
+            вы можете связаться с нашим организатором:</p>
+            <p style="margin-top: 1rem;">
+                <a href="tel:+77051180510">+7 (705) 118-05-10</a> Анель
+            </p>
+        </div>
+        
+        <div class="final-names reveal">Artem & Kristina</div>
+    </footer>
+<!-- Летающие сердечки -->
+<div class="floating-hearts" id="heartsContainer"></div>
+
+<style>
+.floating-hearts {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 9999;
+}
+
+.floating-heart {
+    position: absolute;
+    bottom: -50px;
+    color: #c41e3a;
+    opacity: 0.6;
+    font-size: 1.5rem;
+    animation: floatUp 10s infinite linear;
+    text-shadow: 0 0 10px rgba(196, 30, 58, 0.3);
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(0) rotate(0deg) scale(0.5);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.6;
+    }
+    90% {
+        opacity: 0.6;
+    }
+    100% {
+        transform: translateY(-110vh) rotate(360deg) scale(1.2);
+        opacity: 0;
+    }
+}
+</style>
+<script>
+    let musicStarted = false;
+    
+    function startExperience() {
+        if (!musicStarted) {
+            const audio = document.getElementById('weddingMusic');
+            audio.volume = 0.3;
+            
+            audio.play().then(() => {
+                musicStarted = true;
+                console.log('Music started');
+            }).catch(e => {
+                console.log('Play failed:', e);
+            });
+        }
+    }
+
+    // Автозапуск после любого клика на странице
+    document.addEventListener('click', function() {
+        startExperience();
+    });
+
+    // По клику на первый блок также скроллим вниз
+    document.getElementById('hero').addEventListener('click', function() {
+        document.getElementById('invitation').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // Анимации появления элементов
+    function reveal() {
+        const reveals = document.querySelectorAll('.reveal');
+        reveals.forEach(element => {
+            const windowHeight = window.innerHeight;
+            const elementTop = element.getBoundingClientRect().top;
+            const elementVisible = 150;
+            if (elementTop < windowHeight - elementVisible) {
+                element.classList.add('active');
+            }
+        });
+    }
+
+    window.addEventListener('scroll', reveal);
+    reveal();
+
+    // Летающие сердечки
+    function createFloatingHearts() {
+        const container = document.getElementById('heartsContainer');
+        if (!container) return;
+        
+        const heartSymbols = ['❤', '♥', '❥', '💕', '💖'];
+        
+        setInterval(() => {
+            const heart = document.createElement('div');
+            heart.className = 'floating-heart';
+            heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDuration = (Math.random() * 5 + 8) + 's';
+            heart.style.fontSize = (Math.random() * 1.5 + 1) + 'rem';
+            
+            container.appendChild(heart);
+            
+            setTimeout(() => {
+                if (heart.parentNode) heart.remove();
+            }, 13000);
+        }, 800);
+    }
+
+    window.addEventListener('load', createFloatingHearts);
+</script>
+</body>
+</html>
