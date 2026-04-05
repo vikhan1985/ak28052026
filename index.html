@@ -870,7 +870,7 @@
         }
     }
 
-    // Автозапуск после любого нажатия/касаний на странице
+    // Автозапуск после любого взаимодействия пользователя
     function bindMusicStart() {
         const handler = () => {
             startExperience();
@@ -879,6 +879,9 @@
         document.addEventListener('click', handler, { once: true });
         document.addEventListener('touchstart', handler, { once: true });
         document.addEventListener('pointerdown', handler, { once: true });
+        document.addEventListener('scroll', handler, { once: true, passive: true });
+        document.addEventListener('wheel', handler, { once: true, passive: true });
+        document.addEventListener('touchmove', handler, { once: true, passive: true });
     }
 
     bindMusicStart();
